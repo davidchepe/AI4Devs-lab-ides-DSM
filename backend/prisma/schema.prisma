@@ -18,3 +18,28 @@ model User {
   email String  @unique
   name  String?
 }
+
+// Candidate management
+model Candidate {
+  id                 Int            @id @default(autoincrement())
+  name               String
+  surname            String
+  email              String         @unique
+  jobTitle           String
+  address            String?
+  age                Int?           @default(0)
+  phone              String
+  educationLevel     EducationLevel
+  salaryExpectations Decimal
+  resumeUrl          String?
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+}
+
+enum EducationLevel {
+  HIGH_SCHOOL
+  BACHELORS
+  MASTERS
+  PHD
+  OTHER
+}

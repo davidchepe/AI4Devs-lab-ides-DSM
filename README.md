@@ -1,42 +1,34 @@
-# LTI - Sistema de Seguimiento de Talento
+# Talent Finder - Talent Tracking System
 
-Este proyecto es una aplicación full-stack con un frontend en React y un backend en Express usando Prisma como ORM. El frontend se inicia con Create React App y el backend está escrito en TypeScript.
+This project is a full-stack application with a React frontend and an Express backend using Prisma as ORM and a PostgreSQL database. It includes a candidate management feature for recruiters.
 
-## Explicación de Directorios y Archivos
+## Main Features
 
-- `backend/`: Contiene el código del lado del servidor escrito en Node.js.
-  - `src/`: Contiene el código fuente para el backend.
-    - `index.ts`: El punto de entrada para el servidor backend.
-  - `prisma/`: Contiene el archivo de esquema de Prisma para ORM.
-  - `tsconfig.json`: Archivo de configuración de TypeScript.
-  - `.env`: Contiene las variables de entorno.
-- `frontend/`: Contiene el código del lado del cliente escrito en React.
-  - `src/`: Contiene el código fuente para el frontend.
-  - `public/`: Contiene archivos estáticos como el archivo HTML e imágenes.
-  - `build/`: Contiene la construcción lista para producción del frontend.
-- `docker-compose.yml`: Contiene la configuración de Docker Compose para gestionar los servicios de tu aplicación.
-- `README.md`: Este archivo contiene información sobre el proyecto e instrucciones sobre cómo ejecutarlo.
+- **"Talent Finder" Dashboard**: Modern interface with a large title and logo.
+- **Candidate Management**: Allows recruiters to add new candidates through a complete, validated form.
+- **Resume Upload**: Supports PDF and DOCX files up to 5MB.
+- **Notifications**: Immediate visual feedback after each action.
+- **Responsive and Accessible Design**: Adapts to different screen sizes and uses high-contrast visuals.
 
-## Estructura del Proyecto
+## Directory and File Overview
 
-El proyecto está dividido en dos directorios principales: `frontend` y `backend`.
+- `backend/`: Server code (Node.js + Express + Prisma).
+  - `src/`: Backend source code.
+    - `index.ts`: Entry point and REST API.
+    - `uploads/`: Folder where uploaded resumes are stored.
+  - `prisma/`: Prisma ORM schema.
+- `frontend/`: Client code (React).
+  - `src/`: Frontend source code.
+    - `App.tsx`: Main dashboard and candidate form.
+    - `App.css`: High-contrast styles and modern design.
+  - `public/`: Static files.
+- `docker-compose.yml`: Docker Compose configuration for the PostgreSQL database.
+- `README.md`: This file.
 
-### Frontend
+## Getting Started
 
-El frontend es una aplicación React y sus archivos principales están ubicados en el directorio `src`. El directorio `public` contiene activos estáticos y el directorio `build` contiene la construcción de producción de la aplicación.
-
-### Backend
-
-El backend es una aplicación Express escrita en TypeScript.
-- El directorio `src` contiene el código fuente
-- El directorio `prisma` contiene el esquema de Prisma.
-
-## Primeros Pasos
-
-Para comenzar con este proyecto, sigue estos pasos:
-
-1. Clona el repositorio.
-2. Instala las dependencias para el frontend y el backend:
+1. Clone the repository.
+2. Install dependencies for both frontend and backend:
 ```sh
 cd frontend
 npm install
@@ -44,52 +36,72 @@ npm install
 cd ../backend
 npm install
 ```
-3. Construye el servidor backend:
-```
+3. Set up your database and environment variables as needed for your local environment.
+4. Run Prisma migrations:
+```sh
 cd backend
-npm run build
-````
-4. Inicia el servidor backend:
+npx prisma migrate dev --name init
 ```
+5. Start the backend:
+```sh
 cd backend
-npm run dev 
+npm run dev
 ```
-
-5. En una nueva ventana de terminal, construye el servidor frontend:
-```
-cd frontend
-npm run build
-```
-6. Inicia el servidor frontend:
-```
+6. In a new terminal, start the frontend:
+```sh
 cd frontend
 npm start
 ```
 
-El servidor backend estará corriendo en http://localhost:3010 y el frontend estará disponible en http://localhost:3000.
+The backend will run at http://localhost:3010 and the frontend at http://localhost:3000.
 
-## Docker y PostgreSQL
-
-Este proyecto usa Docker para ejecutar una base de datos PostgreSQL. Así es cómo ponerlo en marcha:
-
-Instala Docker en tu máquina si aún no lo has hecho. Puedes descargarlo desde aquí.
-Navega al directorio raíz del proyecto en tu terminal.
-Ejecuta el siguiente comando para iniciar el contenedor Docker:
+### Development Proxy Setup
+Make sure your `frontend/package.json` contains:
+```json
+"proxy": "http://localhost:3010"
 ```
+This allows the frontend to forward `/api` requests to the backend during development.
+
+## Using the Candidate Management Feature
+
+1. Click the **Add Candidate** button on the "Talent Finder" dashboard.
+2. Fill out the form with the following fields:
+   - **First Name** (required)
+   - **Last Name** (required)
+   - **Email** (required, valid format)
+   - **Job Title** (required)
+   - **Address** (optional)
+   - **Age** (optional, positive integer)
+   - **Phone** (required, valid format)
+   - **Education Level** (required, select from list)
+   - **Salary Expectations** (required, number)
+   - **Resume** (optional, PDF or DOCX, max 5MB)
+3. Click **Submit**. You will receive a success or error notification.
+
+## Backend: API and File Storage
+- The main endpoint is `POST /api/candidates`.
+- Resume files are stored in `backend/uploads/`.
+- The backend validates all fields and file type/size.
+
+## Docker and PostgreSQL
+
+This project uses Docker for the PostgreSQL database:
+
+1. Install Docker if you don't have it.
+2. From the project root, run:
+```sh
 docker-compose up -d
 ```
-Esto iniciará una base de datos PostgreSQL en un contenedor Docker. La bandera -d corre el contenedor en modo separado, lo que significa que se ejecuta en segundo plano.
-
-Para acceder a la base de datos PostgreSQL, puedes usar cualquier cliente PostgreSQL con los siguientes detalles de conexión:
- - Host: localhost
- - Port: 5432
- - User: postgres
- - Password: password
- - Database: mydatabase
-
-Por favor, reemplaza User, Password y Database con el usuario, la contraseña y el nombre de la base de datos reales especificados en tu archivo .env.
-
-Para detener el contenedor Docker, ejecuta el siguiente comando:
-```
+3. To stop the database:
+```sh
 docker-compose down
 ```
+
+## Security and Privacy
+- All inputs are validated and sanitized.
+- Only PDF/DOCX files are allowed for resumes.
+- Ready for RBAC and sensitive field encryption (extend as needed).
+
+---
+
+Enjoy using Talent Finder to efficiently and securely manage candidates!
